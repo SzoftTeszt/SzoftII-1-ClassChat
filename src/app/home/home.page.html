@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Class Chat
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">IphoneClassChat</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-button (click)="router.navigate(['/sign-in'])" expand="full">Sign In with Phone number</ion-button>
+
+  <div class="container">
+  <div *ngFor="let message of messages" [ngClass]="message.user!=userName?'d-flex justify-content-end':''" class="row" > 
+      <div class="col-6" [ngClass]="message.user!=userName?'d-flex justify-content-end':''">
+        <div class="row ">
+          <div class="col-12">
+            {{message.user}}
+          </div>
+       
+        
+          <div class="col-12 ">
+          <span class="message">{{message.content}}</span>
+          <span class="time">{{message.time}}</span>
+          </div>
+          <div *ngIf="message.user==userName" class="col-12">
+            <ion-button size="small" (click)="addMessage()" shape="round">Save</ion-button>
+            <ion-button size="small" (click)="deleteMessage(message)" shape="round">Delete</ion-button>
+          </div>
+        </div>
+      
+       <!-- {{message.user}}, {{message.content}} -->
+    </div>
+  </div>  
+
+    <ion-list>
+      <ion-item>
+        <ion-textarea [(ngModel)]="newMessage" labelPlacement="floating" value="Lorem Ipsum">
+          <div slot="label">Message<ion-text color="danger">(Required)</ion-text></div>
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <ion-button (click)="addMessage()" shape="round">Send</ion-button>
+  </div>
+</ion-content>
