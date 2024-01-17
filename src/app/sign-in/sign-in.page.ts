@@ -12,18 +12,21 @@ import firebase from 'firebase/compat/app';
   styleUrls: ['./sign-in.page.scss'],
 })
 export class SignInPage  {
-  phoneNo:any
+  phoneNo:any=""
   countryCode="+36"
   recaptchaVerifier!:RecaptchaVerifier
   recaptcha=true
-
+  code:any
+  smsSend=false;
 
   constructor(private auth:AuthService, private router:Router, private alertController:AlertController) { }
 
 
 
   ionViewDidEnter(){
+    this.smsSend=false;
     const auth = getAuth();
+    auth.languageCode='hu';
     console.log(auth)
     this.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container',    {
       'size': 'invisible',
@@ -42,12 +45,24 @@ export class SignInPage  {
 
 
   signInWithPhoneNumber(){
-    this.phoneNo="+36303236954"
+    //this.phoneNo="+36303236954"
     this.auth.signInWithPhoneNumber(this.phoneNo, this.recaptchaVerifier).then(
       ()=>{
         console.log("SMS elküldve!!!")
+        this.smsSend=true;
       }).catch(
         (err)=>console.log("Hiba van", err)
       )
+  }
+
+
+  codeVeification(){
+    this.auth.enterVerificartionCode(this.code)
+    .then(
+      (u:any)=>{
+        console.log("User",u)
+        this.router.navigate(['/home'])
+      }
+    )
   }
 }

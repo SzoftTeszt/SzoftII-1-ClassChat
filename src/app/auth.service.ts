@@ -19,6 +19,11 @@ export class AuthService {
     )
    }
 
+   getUser(){
+    return this.userSub;
+   }
+
+
    logout(){
     this.fireAuth.signOut().then(
       ()=>this.router.navigate(['/sign-in'])

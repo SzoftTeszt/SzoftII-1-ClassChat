@@ -14,7 +14,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-button (click)="router.navigate(['/sign-in'])" expand="full">Sign In with Phone number</ion-button>
+  <ion-button (click)="logout()" expand="full">Logout</ion-button>
 
   <div class="container">
   <div *ngFor="let message of messages" [ngClass]="message.user!=userName?'d-flex justify-content-end':''" class="row" > 
