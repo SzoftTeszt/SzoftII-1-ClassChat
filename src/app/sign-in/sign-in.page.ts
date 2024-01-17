@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { RecaptchaVerifier, getAuth } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -18,17 +19,18 @@ export class SignInPage  {
   recaptcha=true
   code:any
   smsSend=false;
-
+  dialCode:any
   constructor(private auth:AuthService, private router:Router, private alertController:AlertController) { }
 
 
 
   ionViewDidEnter(){
+    this.dialCode=environment.counryCode
     this.smsSend=false;
     const auth = getAuth();
     auth.languageCode='hu';
     console.log(auth)
-    this.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container',    {
+    if (!this.recaptchaVerifier) this.recaptchaVerifier= new RecaptchaVerifier(auth,'recaptcha-container',    {
       'size': 'invisible',
       'callback': (response:any) => {
         this.recaptcha=true       
@@ -46,10 +48,11 @@ export class SignInPage  {
 
   signInWithPhoneNumber(){
     //this.phoneNo="+36303236954"
-    this.auth.signInWithPhoneNumber(this.phoneNo, this.recaptchaVerifier).then(
+    this.auth.signInWithPhoneNumber(this.countryCode+this.phoneNo, this.recaptchaVerifier).then(
       ()=>{
         console.log("SMS elküldve!!!")
-        this.smsSend=true;
+        //this.smsSend=true;
+        this.codeVerificationAlert()
       }).catch(
         (err)=>console.log("Hiba van", err)
       )
@@ -64,5 +67,32 @@ export class SignInPage  {
         this.router.navigate(['/home'])
       }
     )
+  }
+
+  async codeVerificationAlert(){
+    const alert= await this.alertController.create(
+      {
+        header:"Enter Verification Code",
+        backdropDismiss:false,
+        inputs:[
+          {
+            name:'code',
+            type:'text',
+            placeholder:'Enter your code'
+          }
+        ],
+        buttons:[
+          {
+            text:'Enter',
+            handler: (res)=>{
+              this.code=res.code
+              this.codeVeification()
+            }
+          }
+        ]
+      }
+    )
+    await alert.present()   
+
   }
 }

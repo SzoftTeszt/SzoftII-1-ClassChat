@@ -17,10 +17,22 @@
         <div id="recaptcha-container"></div>
       </ion-col>
     </ion-row>
-    
+    {{countryCode}}
     <ion-row>
+      <ion-col size="4">
+        <ion-item>
+          <ion-select [(ngModel)]="countryCode" placeholder="Select country code">
+            
+            <!-- <div slot="label">Country Code <ion-text color="danger">(Required)</ion-text></div> -->
+            
+            <ion-select-option *ngFor="let code of dialCode" [value]="code.dialCode">{{code.name}}</ion-select-option>
+            
+          
+          </ion-select>
+        </ion-item>
+      </ion-col>
 
-      <ion-col size="12">
+      <ion-col size="8">
         <ion-item>
           <ion-input [(ngModel)]="phoneNo" label="Phone Number" ></ion-input>
         </ion-item>      
@@ -28,7 +40,8 @@
 
     </ion-row>
 
-    <ion-row>
+    <ion-row> 
+
       <ion-col size="12">
         <ion-button [disabled]="!phoneNo && phoneNo.length==0" (click)="signInWithPhoneNumber()" expand="full">Sign In with Phone number</ion-button>
       </ion-col>
